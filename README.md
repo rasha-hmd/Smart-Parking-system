@@ -1,8 +1,10 @@
-# 🚗 Smart Parking System
+# Smart Parking System
 
 An **Arduino- and ESP32-based Smart Parking System** that combines vehicle detection, automated gate control, and remote monitoring through a Telegram bot.
 
-## 📌 Overview
+<!-- DEMO: add a photo or GIF of the prototype here, e.g. ![Prototype](docs/prototype.jpg) -->
+
+## Overview
 
 The Smart Parking System aims to simplify parking management by automating vehicle detection and providing remote access to parking controls. Built using **Arduino Uno, ESP32, ultrasonic sensors, and a servo motor**, the system detects vehicle presence, manages the entry barrier, and displays parking availability in real time.
 
@@ -10,16 +12,16 @@ An ESP32 provides Wi-Fi connectivity, allowing the parking owner to monitor the 
 
 This project explores the integration of **embedded systems, sensor-based automation, and IoT communication** to create a practical solution for smarter parking management.
 
-## ✨ Features
+## Features
 
-- **🚘 Vehicle Detection:** Two ultrasonic sensors detect vehicle presence and absence.
-- **🚧 Automated Gate Control:** A servo motor operates the parking barrier.
-- **📱 Remote Access:** Open or close the gate remotely through a Telegram bot.
-- **📡 IoT Connectivity:** ESP32 enables wireless communication over Wi-Fi.
-- **🖥️ Real-Time Display:** An LCD module displays parking availability.
-- **⚙️ Embedded Integration:** Arduino Uno handles sensor inputs and hardware control, while the ESP32 manages network communication.
+- **Vehicle Detection:** Two ultrasonic sensors detect vehicle presence and absence.
+- **Automated Gate Control:** A servo motor operates the parking barrier.
+- **Remote Access:** Open or close the gate remotely through a Telegram bot.
+- **IoT Connectivity:** ESP32 enables wireless communication over Wi-Fi.
+- **Real-Time Display:** An LCD module displays parking availability.
+- **Embedded Integration:** Arduino Uno handles sensor inputs and hardware control, while the ESP32 manages network communication.
 
-## 🛠️ Hardware Components
+## Hardware Components
 
 | Component | Purpose |
 |---|---|
@@ -30,7 +32,7 @@ This project explores the integration of **embedded systems, sensor-based automa
 | I2C LCD module | Parking status display |
 | Resistors and jumper wires | Circuit connections and signal interfacing |
 
-## 🏗️ System Architecture
+## System Architecture
 
 The system is divided into two main parts:
 
@@ -65,7 +67,7 @@ The two microcontrollers exchange information through serial communication.
        Motor   Display
 ```
 
-## 🔌 Hardware Connections
+## Hardware Connections
 
 ### Arduino Uno
 
@@ -114,9 +116,9 @@ The microcontrollers communicate using serial signals.
 | ESP32 GPIO18 → 2 kΩ resistor → GND | Voltage-divider connection |
 | ESP32 GPIO19 → Arduino pin 2 | Return serial signal |
 
-> **⚠️ Important:** Verify that these connections match the serial interfaces configured in your source code. The ESP32 uses **3.3 V logic and its GPIO pins are not 5 V tolerant**. Ensure that any signal originating from the Arduino Uno is level-shifted appropriately before reaching an ESP32 input. Do not connect the Arduino's 5 V TX signal directly to an ESP32 GPIO.
+> **Note:** the ESP32 uses 3.3 V logic and its GPIO pins are not 5 V tolerant, which is why the Arduino's 5 V signal goes through the 1 kΩ / 2 kΩ voltage divider before reaching GPIO18.
 
-## 💻 Software Requirements
+## Software Requirements
 
 - [Arduino IDE](https://www.arduino.cc/en/software)
 - Arduino Uno board support
@@ -126,7 +128,7 @@ The microcontrollers communicate using serial signals.
 
 ### Required Libraries
 
-Install the libraries used by your source code through the Arduino IDE Library Manager or the appropriate library installation method.
+Install these through the Arduino IDE Library Manager.
 
 **Arduino Uno**
 - `Servo.h`
@@ -143,20 +145,18 @@ Install the libraries used by your source code through the Arduino IDE Library M
 
 Some libraries are included with the relevant board packages, while others must be installed separately.
 
-## 🚀 Installation and Setup
+## Installation and Setup
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/rasha-hmd/Smart-Parking-System.git
-cd Smart-Parking-System
+git clone https://github.com/rasha-hmd/Smart-Parking-system.git
+cd Smart-Parking-system
 ```
-
-Replace the repository URL with the actual GitHub repository URL if the project uses a different name or path.
 
 ### 2. Configure the Arduino Uno
 
-1. Open `arduinoCode.ino` in the Arduino IDE.
+1. Open `arduinoCode/arduinoCode.ino` in the Arduino IDE.
 2. Install the required libraries.
 3. Select **Arduino Uno** as the board.
 4. Select the correct serial port.
@@ -166,8 +166,8 @@ Replace the repository URL with the actual GitHub repository URL if the project 
 ### 3. Configure the ESP32
 
 1. Install ESP32 board support in the Arduino IDE.
-2. Open `esp32.ino`.
-3. Configure the Wi-Fi credentials and Telegram bot settings as required by the source code.
+2. Open `esp32/esp32.ino`.
+3. Fill in `ssid`, `password`, `BOTtoken` and `CHAT_ID` at the top of the sketch.
 4. Select the correct ESP32 board and serial port.
 5. Upload the sketch.
 
@@ -177,11 +177,11 @@ Replace the repository URL with the actual GitHub repository URL if the project 
 
 1. Create a Telegram bot using [@BotFather](https://t.me/BotFather).
 2. Obtain the bot token.
-3. Configure the token and any required chat ID in the ESP32 sketch.
+3. Put the token and your chat ID in the ESP32 sketch. Messages from any other chat ID are rejected.
 4. Connect the ESP32 to a Wi-Fi network.
-5. Start a conversation with your bot and test the commands implemented in the code.
+5. Start a conversation with your bot and send `/start`.
 
-## 📲 Usage
+## Usage
 
 Once the hardware and software are configured:
 
@@ -191,20 +191,31 @@ Once the hardware and software are configured:
 4. Use the Telegram bot to check parking status and control the gate.
 5. Allow the ultrasonic sensors to detect vehicle presence and update the system accordingly.
 
-The exact Telegram commands and gate-control behavior depend on the implementation in `esp32.ino` and `arduinoCode.ino`.
+### Telegram commands
 
-## 📂 Project Structure
+| Command | Action |
+|---|---|
+| `/start` | Show the list of commands |
+| `/enable` | Turn automatic gate control on |
+| `/disable` | Turn automatic gate control off |
+| `/open` | Open the gate |
+| `/close` | Close the gate |
+| `/state` | Report the number of cars in the parking |
+
+Only the chat ID configured in the sketch can use the bot.
+
+## Project Structure
 
 ```text
-Smart-Parking-System/
-├── arduinoCode.ino    # Arduino Uno: sensors, servo and LCD
-├── esp32.ino          # ESP32: Wi-Fi and Telegram communication
-└── README.md          # Project documentation
+Smart-Parking-system/
+├── arduinoCode/
+│   └── arduinoCode.ino    # Arduino Uno: sensors, servo and LCD
+├── esp32/
+│   └── esp32.ino          # ESP32: Wi-Fi and Telegram bot
+└── README.md
 ```
 
-Adjust the structure above to match the actual repository files.
-
-## 🎯 Project Objectives
+## Project Objectives
 
 - Apply microcontroller programming to a real-world automation problem.
 - Integrate sensors and actuators into an embedded system.
@@ -212,7 +223,7 @@ Adjust the structure above to match the actual repository files.
 - Explore IoT connectivity and remote hardware control.
 - Develop a user-friendly approach to monitoring parking availability.
 
-## 🔮 Possible Improvements
+## Possible Improvements
 
 - Add a mobile application with a dedicated graphical interface.
 - Introduce additional parking sensors to monitor multiple spaces.
@@ -220,30 +231,13 @@ Adjust the structure above to match the actual repository files.
 - Add historical parking data and usage statistics.
 - Improve fault detection and communication reliability.
 
-## 🤝 Contributing
-
-Contributions and suggestions are welcome.
-
-1. Fork the repository.
-2. Create a feature branch.
-3. Commit your changes.
-4. Submit a pull request describing the improvements.
-
-For significant changes, consider opening an issue first to discuss the proposed solution.
-
-## 📄 License
-
-This project is intended to be licensed under the MIT License. Include a `LICENSE` file containing the MIT License text in the repository to make the licensing explicit.
-
-## 👩‍💻 Authors
+## Author
 
 **Rasha Hammoud**
 
 Academic supervisors:
 - Dr. Abed Ellatif Samhat
 - Dr. Rida El-Chall
-
-For questions or further information, feel free to open an issue in the repository.
 
 ---
 
